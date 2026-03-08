@@ -1,0 +1,502 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap");
+
+:root {
+  --base-color: #0f172a; /* main background */
+  --text-color: #f1f5f9; /* high contrast text */
+
+  --primary-color: #6366f1; /* main buttons / links */
+  --primary-hover: #4f46e5;
+  --secondary-color: #334155; /* secondary actions / softer buttons */
+  --secondary-hover: #475569;
+  --button-border: #334155;
+
+  --input-color: #243449; /* input background */
+
+  --color-1: #1e293b; /* cards */
+  --color-2: #94a3b8; /* muted text / icons */
+  --color-3: #10b981; /* success / highlight */
+  --color-4: #10b9813d; /* soft success / glow */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter;
+}
+
+body {
+  background: var(--base-color);
+  padding: 1em;
+  background-color: var(--base-color);
+  justify-content: center;
+  min-height: 100vh;
+
+  color: var(--text-color);
+}
+
+body::placeholder {
+  color: var(--text-color);
+  opacity: 1;
+}
+
+.title {
+  caret-color: transparent;
+  user-select: none;
+  font-size: 5rem;
+  text-align: center;
+  font-family:
+    Inter "Segoe UI",
+    Tahoma,
+    Geneva,
+    Verdana,
+    sans-serif;
+}
+
+.signup-window {
+  display: block;
+
+  margin: 2em auto;
+  width: min(30em, 100%);
+  background-color: var(--color-1);
+  backdrop-filter: blur(8px);
+  padding: min(2em, 15%);
+  border-radius: 1em;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.input-group {
+  display: flex;
+  justify-content: center; /* horizontal */
+  align-items: center; /* vertikal */
+  flex-direction: column;
+  gap: 5rem;
+
+  background-color: var(--color-1);
+
+  font-family: Roboto;
+}
+
+.email-wrapper {
+  display: flex;
+  justify-content: center; /* horizontal */
+  align-items: center; /* vertikal */
+  flex-direction: column;
+  width: 100%;
+}
+
+.inputField {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+
+  border: none;
+  border-bottom: 1px solid;
+  border-radius: 1em;
+
+  font-size: medium;
+  font-family: Poppins;
+  padding: 1em;
+
+  background-color: var(--input-color);
+  color: var(--text-color);
+}
+
+.message-container {
+  position: fixed;
+  top: 2em;
+  left: 2em;
+
+  display: flex;
+  flex-direction: column; /* 🔥 untereinander */
+  gap: 1em; /* Abstand zwischen Nachrichten */
+}
+
+.text-message {
+  width: min(30em, 100%);
+  background-color: var(--color-4);
+  padding: min(2em, 15%);
+  border-style: solid;
+  border-radius: 1em;
+  border-color: #111111;
+  border-width: 10%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    outline-color: transparent;
+    outline-width: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-10px);
+    outline-style: solid;
+    outline-color: red;
+    outline-width: 0.1vw;
+  }
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5vw;
+}
+
+.submit {
+  /* background */
+  background-color: var(--primary-color);
+
+  /* font and text */
+  font-family: Roboto;
+  color: var(--text-color);
+
+  /* layout */
+  width: 100%;
+  padding: 1rem 2rem;
+  border-radius: 1em;
+}
+
+.submit:hover {
+  background-color: var(--primary-hover);
+}
+
+.changeToOtherMode {
+  /* background */
+  background-color: var(--secondary-color);
+
+  /* font and text */
+  font-family: Roboto;
+  color: var(--text-color);
+  text-align: center;
+
+  /* layout */
+  margin-left: auto;
+  display: flex;
+  width: 30%;
+  justify-content: center;
+  height: min(1em, 1%);
+
+  /* border */
+  border: transparent;
+  border-radius: 1em;
+  padding: 0.1em;
+}
+.changeToOtherMode:hover {
+  background-color: var(--secondary-hover);
+}
+
+/* ------- every error message ------- */
+.error-message {
+  opacity: 0;
+  border-radius: 1em;
+  padding: 1em;
+  width: min(30em, 100%);
+  text-align: center;
+  background-color: rgba(255, 0, 0, 0.356);
+}
+
+.email-wrapper.tooManyTries .error-message {
+  animation: fadeIn 1s ease forwards;
+}
+
+.error-message-signup {
+  opacity: 0;
+  display: none; /* erst bei Fehler anzeigen */
+  background-color: rgb(255, 0, 0);
+  padding: 0.5em 1em;
+  border-radius: 0.5em;
+  font-size: small;
+
+  font-family: Fira Code;
+}
+
+.input-container.notAnEmail .error-message-signup {
+  display: flex;
+  animation: fadeIn 1s ease forwards;
+}
+
+.input-container.notAnUsername .error-message-signup {
+  display: flex;
+  animation: fadeIn 1s ease forwards;
+}
+
+.input-container.notAPassword .error-message-signup {
+  display: flex;
+  animation: fadeIn 1s ease forwards;
+}
+
+/* dashboard view */
+.dashboard-window {
+  margin: 2em auto;
+  width: min(40em, 100%);
+  background-color: var(--color-1);
+  padding: min(2em, 15%);
+  border-radius: 1em;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.input-group-dashboard {
+  display: flex;
+  justify-content: center; /* horizontal */
+  align-items: center; /* vertikal */
+  flex-direction: column;
+  gap: 1em;
+
+  background-color: var(--color-1);
+
+  font-family: Roboto;
+
+  margin-top: 5em;
+}
+
+.admin-view {
+  display: flex;
+  flex-direction: column; /* 🔥 untereinander */
+  gap: 1em;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--color-1);
+
+  /* border */
+  border-radius: 1em;
+  padding: 1em;
+}
+
+.admin-table th,
+td {
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+.admin-table td:last-child,
+th:last-child {
+  border-right: none;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table th:first-child,
+td:first-child {
+  background-color: red;
+}
+
+.account-symbol {
+  position: fixed;
+  top: 2em;
+  right: 2em;
+}
+
+.profilePicture-small {
+  width: clamp(40px, 5vw, 100px);
+  height: clamp(40px, 5vw, 100px);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profilePicture-small:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+/* -----------Feed---------- */
+
+.feed-window {
+  display: grid;
+  gap: clamp(10em, 10vw, 15em);
+
+  align-items: center;
+  justify-items: center;
+
+  overflow: visible;
+
+  margin: 2em auto;
+  width: min(70em, 70%);
+  backdrop-filter: blur(8px);
+  padding: min(2em, 15%);
+  border-radius: 1em;
+}
+
+.message-text-container {
+  grid-row: 3;
+  grid-column: 2;
+  align-self: center;
+}
+
+.Username-message {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 1rem;
+  padding: 0.3em;
+  border-radius: 1em;
+  place-self: center;
+  background-color: transparent;
+  border: none;
+
+  color: var(--text-color);
+}
+
+.Username-message:hover {
+  scale: 1.05;
+  text-decoration: underline;
+}
+
+.Title-message {
+  grid-row: 1;
+  grid-column: 2;
+  align-self: center;
+  place-self: center;
+
+  background-color: transparent;
+  border: none;
+}
+
+.Title-message:hover {
+  scale: 1.05;
+}
+
+.Content-message {
+  grid-row: 2;
+  grid-column: 2;
+  align-self: center;
+  text-align: center;
+  font-size: 2rem;
+  place-self: center;
+}
+
+.profile-picture-message {
+  width: clamp(40px, 2vw, 100px);
+  height: clamp(40px, 2vw, 100px);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.img-text-message {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr auto 1fr;
+  justify-content: center;
+  /* Image oben, Content mitte, Username unten – oder wie du willst */
+
+  width: 50%;
+  aspect-ratio: 1/1;
+  background-color: #334155;
+  padding: min(2em, 15%);
+  border-radius: 1em;
+  margin-bottom: 10vh;
+
+  outline: 1em solid #334155;
+  outline-offset: 1em;
+
+  position: relative;
+
+  overflow: visible
+}
+
+.img-text-message::before {
+  content: "";
+  position: absolute;
+  bottom: -7em;
+  left: 90%; /* relativ zur Box-Breite */
+  transform: translateX(-100%);
+
+  border-top: 5em solid #334155;
+  border-left: 5em solid transparent;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.profilePic-change-window.hidden {
+  display: none;
+}
+
+.profilePic-change-window.shown {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 30%;
+  aspect-ratio: 1/1;
+  background-color: #334155;
+  padding: min(2em, 15%);
+  border-radius: 1em;
+}
+
+.like-button {
+  grid-row: 2;
+  grid-column: 3;
+  align-self: center;
+  justify-self: end;
+
+  background-color: transparent;
+  border: none;
+  font-size: 2rem;
+
+  height: 5vh;
+  aspect-ratio: 1/1;
+  padding: 0;
+  line-height: 1;
+
+
+  cursor: pointer;
+
+  transform-origin: center;
+
+    user-select: none;
+  caret-color: transparent;
+}
+
+.like-button:hover {
+  transform: scale(1.05);
+}
+
+/*-----------------------Profile View----------------------*/
+.profilePicture-big {
+  width: clamp(80px, 15vw, 300px);
+  height: clamp(80px, 15vw, 300px);
+  border-radius: 50%;
+  object-fit: cover;
+  grid-column: 1;
+}
+
+.head_line_profile_view {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  flex-direction: row;
+  justify-content: center;
+  background-color: var(--color-2);
+}
+
+.title.profileview {
+  grid-column: 2;
+  place-self: center;
+}
+
+.profile_stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 1vw;
+}
+
+.profile_stats p {
+  outline: solid var(--color-1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+/*---------------------View Single Post-----------------------*/
+.post-single-view-container {
+  display: flex;
+  justify-content: center;
+}
