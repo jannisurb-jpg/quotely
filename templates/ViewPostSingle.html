@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotely</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="feed-window">
+            <div class="img-text-message">
+                    <img src="/static/icons/quotationmark-removebg-preview.png" alt="" class="Title-message" width="100px">
+
+                    <p class="Content-message">
+                        {{ post.content }}
+                    </p>
+                    <div class="message-text-container">
+                        <p type="submit" name="action" value="post.id = {{ post.id }}" class="Username-message">
+                        <img src="{{ user.profilePicture }}" alt="" class="profile-picture-message">
+                        @{{ user.username }} 
+                    </p>
+                    </div>
+
+                    <form method="POST" class="like-button">
+                    <input type="hidden" name="post_id" value="{{ post.id }}" class="like-button">
+                    <button type="submit" name="action" value="give_like" class="like-button">
+                        ❤️ {{ post.likers|length }}
+                    </button>
+                    </form>
+            </div>
+    </div>
+</body>

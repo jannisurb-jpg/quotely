@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ username }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="title"><strong>Dashboard</strong></div>
+    <div class="dashboard-window">
+        <p>Hallo {{ username }}!</p>
+        <p>Du hast dein Konto am {{ created_at.strftime("%d.%m.%Y") }} erstellt!</p>
+
+        <form class="input-group-dashboard" action="" method="POST">
+            <input type="text" name="change_password" placeholder="Neues Passwort eingeben..." class="inputField">
+            <button type="submit" name="action" value="change_password" class="submit">Bestätigen</button>
+        </form>
+        <form class="input-group-dashboard" action="" method="POST">
+            <button type="submit" name="action" value="change_profilePic" class="submit">Profilbild ändern</button>
+        </form>
+    </div>
+
+    {% if form %}
+    <div class="profilePic-change-window {{ changeProfilePic }}">
+        <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+        
+                {% for error in form.photo.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+
+                <div class="roww justify-content-center">
+                    <div class="col-auto">
+                        {{ form.photo(class="form-control") }}
+                    </div>
+                    <div class="col-auto">
+                        {{ form.submit(class="btn btn-success") }}
+                    </div>
+                </div>
+            </form>
+
+            {% if file_url %}
+            <div class="mt-5">
+                <img src="{{ file_url }}" alt="">
+            </div>
+            {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="dashboard-window">
+            <form class="admin-view" action="" method="POST">
+            {% if username == "admin" %}
+            <p>Admin Bereich</p>
+            <table class="admin-table">
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Löschen?</th>
+                </tr>
+
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email_address }}</td>
+                    <td>{{ user.username }}</td>
+                    <td><button type="submit" class="submit" name="delete" value="{{ user.id }}">Löschen</button></td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+        </form>
+    </div>
+
+    <!--<section class="account-symbol">
+        <form action="" method="POST">
+            <button class="profilePicture-small" name="action" value="open_settings" type="submit">
+                <img src="{{ profilePicture }}" alt="" class="profilePicture-small">
+            </button>
+        </form>
+    </section>-->
+</body>
+</html>
