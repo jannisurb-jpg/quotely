@@ -173,7 +173,7 @@ body::placeholder {
   font-family: Roboto;
   color: var(--text-color);
   text-align: center;
-  font-size: .8rem;
+  font-size: 0.8rem;
 
   /* layout */
   margin-left: auto;
@@ -293,7 +293,7 @@ body::placeholder {
 
 .message-text-container p {
   margin: 0;
-  padding-left: 0; 
+  padding-left: 0;
   text-wrap: wrap;
 }
 
@@ -339,7 +339,7 @@ body::placeholder {
   grid-column: 1/-1;
   align-self: center;
   text-align: center;
-  font-size: clamp(.7rem, 2rem, 3rem);
+  font-size: clamp(0.7rem, 2rem, 3rem);
   place-self: center;
 }
 
@@ -355,11 +355,12 @@ body::placeholder {
   grid-template-rows: 1fr 1fr 1fr;
   grid-template-columns: 1fr 1fr 1fr;
   justify-content: center;
+  justify-self: right;
   gap: 1em;
   row-gap: 2em;
   /* Image oben, Content mitte, Username unten – oder wie du willst */
 
-  width: 100%;
+  width: min(100%, 500px);
   aspect-ratio: 1/1;
   background-color: #334155;
   padding: min(2em, 15%);
@@ -370,7 +371,7 @@ body::placeholder {
 
   position: relative;
 
-  overflow: visible
+  overflow: visible;
 }
 
 .img-text-message::before {
@@ -402,7 +403,8 @@ body::placeholder {
   font-size: 1rem;
 }
 
-.like-btn, .comments-btn {
+.like-btn,
+.comments-btn {
   background-color: transparent;
   border: none;
   font-size: 2rem;
@@ -412,16 +414,16 @@ body::placeholder {
   padding: 0;
   line-height: 1;
 
-
   cursor: pointer;
 
   transform-origin: center;
 
-    user-select: none;
+  user-select: none;
   caret-color: transparent;
 }
 
-.like-btn:hover, .comments-btn:hover {
+.like-btn:hover,
+.comments-btn:hover {
   transform: scale(1.05);
 }
 
@@ -457,7 +459,6 @@ body::placeholder {
   font-size: 1rem;
 }
 
-
 .new-post-button {
   font-size: 2rem;
   border-radius: 50%;
@@ -491,12 +492,17 @@ body::placeholder {
   z-index: 9999; /* Ganz nach oben damit! */
 
   border-radius: 1em;
-  background-color: rgba(128, 128, 128, 0.2); /* Etwas transparenter für besseren Effekt */
-  
+  background-color: rgba(
+    128,
+    128,
+    128,
+    0.2
+  ); /* Etwas transparenter für besseren Effekt */
+
   /* Der magische Teil */
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
-  
+
   border: transparent; /* Optional: Ein feiner Rand sieht edler aus */
   overflow: hidden;
 
@@ -530,7 +536,7 @@ body::placeholder {
   opacity: 0;
 }
 
-.search.open{
+.search.open {
   visibility: visible;
   pointer-events: all;
   opacity: 1;
@@ -563,6 +569,123 @@ body::placeholder {
 .profilePicture-small-feed:hover {
   transform: scale(1.05);
   cursor: pointer;
+}
+
+.comment-section {
+  display: none;
+}
+
+.comment-section.open {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 50%;
+  outline: 1px solid gray;
+  height: 60%;
+  width: 40%;
+  border-radius: 1em;
+  padding: 1em;
+  padding-bottom: 0;
+  margin: 2em auto;
+   box-shadow: 0 0 20px rgba(126, 126, 126, 0.3);
+   gap: 1em;
+}
+
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+   overflow-x: hidden;
+   border-radius: 1em;
+}
+
+.comment-list::-webkit-scrollbar {
+  display: none;
+}
+
+
+.comment-section h3 {
+  text-align: center;
+}
+
+.input-comment {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding: 1em;
+  margin-left: -1em;
+  margin-right: -1em;
+  width: calc(100% + 2em);
+
+  background-color: var(--color-2);
+
+  border-radius: 1em 1em 0 0;
+}
+
+.input-comment button {
+  /* background */
+  background-color: var(--secondary-color);
+
+  /* font and text */
+  font-family: Roboto;
+  color: var(--text-color);
+  text-align: center;
+
+  /* layout */
+  justify-content: center;
+  justify-self: left;
+  grid-column: 1;
+
+  /* border */
+  border: transparent;
+  border-radius: 1em;
+  padding: 0.5em;
+}
+
+.input-comment button:hover { 
+  background-color: var(--secondary-hover);
+}
+
+.input-comment input {
+  width: 90%;
+  padding: 0.5em;
+  border-radius: 1em;
+  background-color: var(--input-color);
+  color: var(--text-color);
+  border: transparent;
+}
+
+.comment {
+  width: 99%;
+  outline: 1px solid var(--button-border);
+  border-radius: 1em;
+  padding: 1em;
+}
+
+.comment-content {
+  margin-top: 1em;
+}
+
+.comment-pic {
+  width: clamp(50px, 1vw, 150px);
+  height: clamp(50px, 1vw, 150px);
+  border-radius: 50%;
+  object-fit: cover;
+  grid-column: 3;
+}
+
+.comment-username {
+  align-self: center;
+}
+
+.comment-author-form {
+  display: flex;
+}
+
+.comment-created-at {
+  margin: 0;
+  padding-left: 0;
+  text-wrap: wrap;
+  font-size: .8rem;
 }
 
 /*-----------------------Profile View----------------------*/
@@ -616,7 +739,7 @@ body::placeholder {
 
   font-size: 1rem;
 
-  outline: .1em solid red;
+  outline: 0.1em solid red;
   background-color: rgba(255, 0, 0, 0.459);
   margin-top: 1em;
   border-radius: 1em;
@@ -655,7 +778,7 @@ body::placeholder {
 
   font-size: 1rem;
 
-  outline: .1em solid rgb(255, 255, 255);
+  outline: 0.1em solid rgb(255, 255, 255);
   background-color: rgb(255, 255, 255);
   margin-top: 1em;
   border-radius: 1em;
@@ -694,9 +817,9 @@ body::placeholder {
   border-color: var(--button-border);
   color: var(--text-color);
   font-size: 4rem;
-  border-radius:50%;
+  border-radius: 50%;
 
-  padding: .2em;
+  padding: 0.2em;
 
   cursor: pointer;
 
@@ -832,7 +955,7 @@ body::placeholder {
 .col-auto {
   display: flex;
   flex-direction: column;
-  gap: .1em;
+  gap: 0.1em;
 }
 
 .profilepic-buttons {
@@ -845,7 +968,7 @@ body::placeholder {
 
   /* layout */
   width: 100%;
-  padding: .2rem .4rem;
+  padding: 0.2rem 0.4rem;
   border-radius: 1em;
 }
 
@@ -886,7 +1009,7 @@ body::placeholder {
 
   /* layout */
   width: 50%;
-  padding: .2rem .4rem;
+  padding: 0.2rem 0.4rem;
   border-radius: 1em;
 }
 
@@ -956,7 +1079,7 @@ td:first-child {
 
   /* layout */
   width: 50%;
-  padding: .2rem .4rem;
+  padding: 0.2rem 0.4rem;
   border-radius: 1em;
 }
 

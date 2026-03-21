@@ -1,3 +1,98 @@
+const inputComment = document.getElementById("input-comment");
+let mostCenteredPost = null;
+let oldMostCenteredPost = null;
+
+function GetMostCenteredPost() {
+    const posts = document.getElementsByClassName("img-text-message");
+  const windowHeight = window.innerHeight;
+
+  let newMostCenteredPost = posts[0];
+
+  for (let i = 0; i < posts.length; i++) {
+    const rect = posts[i].getBoundingClientRect();
+    const elementMiddleY = rect.top + rect.height / 2;
+
+    const currentRect = newMostCenteredPost.getBoundingClientRect();
+    const currentMiddleY = currentRect.top + currentRect.height / 2;
+
+    if (
+      Math.abs(elementMiddleY - windowHeight / 2) <
+      Math.abs(currentMiddleY - windowHeight / 2)
+    ) {
+      newMostCenteredPost = posts[i];
+    }
+  }
+
+  // 👉 HIER DER WICHTIGE FIX
+  oldMostCenteredPost = mostCenteredPost;
+  mostCenteredPost = newMostCenteredPost;
+
+  // Scale reset
+  for (let i = 0; i < posts.length; i++) {
+    posts[i].style.scale = "1";
+  }
+
+  mostCenteredPost.style.scale = "1.05";
+}
+
+function loadComments(postId) {
+  if (!postId) return;
+
+  fetch(`/user/${currentUsername}/feed/comment`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ post_id: postId }),
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      const commentList = document.getElementById("comment-list");
+
+      // 🔥 nur Liste leeren, NICHT ganzen Container!
+      commentList.innerHTML = "";
+
+      const comments = response.data;
+
+      comments.forEach((comment) => {
+        const div = document.createElement("div");
+        div.classList.add("comment");
+
+        const form = document.createElement("div");
+        form.classList.add("comment-author-form");
+
+        const profilePicture = document.createElement("img");
+        profilePicture.src = comment.profilePicture;
+        profilePicture.classList.add("comment-pic");
+
+        const username = document.createElement("p");
+        username.innerText = "@" + comment.username;
+        username.classList.add("comment-username");
+
+        const content = document.createElement("p");
+        content.innerText = comment.content;
+        content.classList.add("comment-content");
+
+        const createdAt = document.createElement("p");
+        createdAt.innerText = comment.created_at;
+        createdAt.classList.add("comment-created-at");
+
+        // Struktur bauen
+        form.appendChild(profilePicture);
+        form.appendChild(username);
+
+        div.appendChild(form);
+        div.appendChild(createdAt);
+        div.appendChild(content);
+
+        commentList.appendChild(div);
+      });
+    })
+    .catch((error) => {
+      console.error("Fehler beim Laden der Kommentare:", error);
+    });
+}
+
 document.querySelectorAll(".like-btn").forEach((button) => {
   button.addEventListener("click", () => {
     const postId = button.getAttribute("data-post-id");
@@ -170,7 +265,7 @@ document.querySelectorAll(".comments-btn").forEach((button) => {
         easing: "easeInOutQuad",
       });
     } else {
-      const postId = button.getAttribute("data-post-id");
+      let postId = button.getAttribute("data-post-id");
 
       fetch(`/user/${currentUsername}/feed/comment`, {
         method: "POST",
@@ -196,87 +291,46 @@ document.querySelectorAll(".comments-btn").forEach((button) => {
       const bodyWithoutTitle = document.getElementById("body-without-title");
 
       commentSection.classList.add("open");
+      commentSection.style.gridColumn = "2";
       feedContainer.style.gridTemplateColumns = "1fr";
       bodyWithoutTitle.style.display = "grid";
       bodyWithoutTitle.style.gridTemplateColumns = "1fr 1fr";
+
+      GetMostCenteredPost();
+
+      postId = mostCenteredPost.id;
+
+      loadComments(postId);
+
+      console.log(mostCenteredPost);
     }
   });
 });
 
 // 🔥 SCROLL LOGIC (FIXED)
-let mostCenteredPost = null;
-let oldMostCenteredPost = null;
+const commentInput = document.getElementById("input-comment");
 
 window.addEventListener("scroll", () => {
   const commentSection = document.getElementById("comment-section");
 
   if (!commentSection.classList.contains("open")) return;
 
-  const posts = document.getElementsByClassName("img-text-message");
-  const windowHeight = window.innerHeight;
-
-  let newMostCenteredPost = posts[0];
-
-  for (let i = 0; i < posts.length; i++) {
-    const rect = posts[i].getBoundingClientRect();
-    const elementMiddleY = rect.top + rect.height / 2;
-
-    const currentRect = newMostCenteredPost.getBoundingClientRect();
-    const currentMiddleY = currentRect.top + currentRect.height / 2;
-
-    if (
-      Math.abs(elementMiddleY - windowHeight / 2) <
-      Math.abs(currentMiddleY - windowHeight / 2)
-    ) {
-      newMostCenteredPost = posts[i];
-    }
-  }
-
-  // 👉 HIER DER WICHTIGE FIX
-  oldMostCenteredPost = mostCenteredPost;
-  mostCenteredPost = newMostCenteredPost;
-
-  // Scale reset
-  for (let i = 0; i < posts.length; i++) {
-    posts[i].style.scale = "1";
-  }
-
-  mostCenteredPost.style.scale = "1.05";
+  GetMostCenteredPost();
 
   // nur wenn sich wirklich was geändert hat
   if (oldMostCenteredPost && oldMostCenteredPost !== mostCenteredPost) {
     const postId = mostCenteredPost.id;
 
-    fetch(`/user/${currentUsername}/feed/comment`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ post_id: postId }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const container = document.getElementById("comment-section");
-        container.innerHTML = "<h3>Kommentare</h3>";
-
-        const comments = response.data;
-
-        comments.forEach((comment) => {
-          const div = document.createElement("div");
-          div.classList.add("comment");
-          div.textContent = comment.content;
-          container.appendChild(div);
-        });
-      });
+    loadComments(postId);
   }
 });
 
 // SEND COMMENT
-const inputComment = document.getElementById("write_comment");
 const sendCommentButton = document.getElementById("send_comment");
+const commentInputField = document.getElementById("write_comment");
 
 sendCommentButton.addEventListener("click", () => {
-  const commentInput = inputComment.value;
+  const commentInput = commentInputField.value;
   const postId = mostCenteredPost?.id;
 
   fetch(`/user/${currentUsername}/feed/write_comment`, {
@@ -290,4 +344,7 @@ sendCommentButton.addEventListener("click", () => {
     .catch((error) => {
       console.error("Fehler beim Kommentar:", error);
     });
+
+    loadComments(postId);
+    commentInputField.value = "";
 });

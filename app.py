@@ -733,7 +733,9 @@ def show_comments(username):
     if isinstance(post_id, str) and post_id.startswith("post-"):
         post_id = post_id.replace("post-", "")
     
-    comments = Comments.query.filter_by(post_id=post_id).all()
+    comments = Comments.query.filter_by(post_id=post_id)\
+    .order_by(Comments.created_at.desc())\
+    .all()
 
     # ✅ Manuell serialisieren
     comments_list = [
@@ -741,6 +743,8 @@ def show_comments(username):
             "id": c.id,
             "content": c.content,
             "user_id": c.user_id,
+            "username": User.query.get(c.user_id).username,
+            "profilePicture": User.query.get(c.user_id).profilePicture,
             "created_at": c.created_at.strftime('%d.%m.%Y %H:%M')
         }
         for c in comments
