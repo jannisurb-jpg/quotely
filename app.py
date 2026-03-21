@@ -17,16 +17,32 @@ from itsdangerous import Signer
 import resend
 import uuid
 import secrets
+import os
+from dotenv import load_dotenv
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
-resend.api_key = "re_DB6ZT1Lv_NKABJa1LM1zzLk361E1D5N71"
+load_dotenv()
+
+resend.api_key = os.environ.get("RESEND_API_KEY")
 
 app = flask.Flask(__name__)
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=[]
+)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-app.secret_key = "SessionTestKey123"
+app.secret_key = os.environ.get("SECRET_KEY")
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=15)
+app.config["SESSION_COOKIE_SECURE"] = True    # nur HTTPS
+app.config["SESSION_COOKIE_HTTPONLY"] = True  # kein JS-Zugriff
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax" # CSRF-Schutz
 
 app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
 
@@ -134,6 +150,7 @@ def main():
     return render_template("index.html")
 
 @app.route('/signup', methods=['GET', 'POST'])
+@limiter.limit("10 per hour")
 def signup():
     #check if session is on
     try:
@@ -312,6 +329,7 @@ def login():
     return render_template('Login_Page.html', tooManyTries=tooManyTries, email=emailOrUsername, blockedTimeLeft=blockedTimeLeft, timeUnit=timeUnit)
 
 @app.route('/reset-password', methods=['GET', 'POST'])
+@limiter.limit("5 per hour")
 def startReset():
     if request.method == "POST":
         action = request.form.get("action")
@@ -480,9 +498,10 @@ def reset_password(token):
         if request.method == "POST":
             action = request.form.get("action")
             if action == "change_password":
-                ChangePassword(user.id)
+                user.reset_token = None
                 user.expire_token = datetime.utcnow()
                 db.session.commit()
+                ChangePassword(user.id)
     else:
         redirect(url_for('main'))
 
