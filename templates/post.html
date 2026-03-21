@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="title"><strong>Post Menu</strong></div>
+    <div class="signup-window">
+        <form class="input-group" action="" method="POST">
+            <div class="input-container">
+                <input type="text" name="title" placeholder="Gib den Titel ein..." class="inputField">
+            </div>
+            <div class="input-container">
+                <input type="text" name="content" placeholder="Was soll drin stehen" class="inputField">
+            </div>
+            <button type="submit" class="submit">Post</button>
+        </form>
+    </div>
+</body>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotely</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+    <div class="title"><strong>Quotely</strong></div>
+    <div class="body-wothout-title" id="body-without-title">
+            <div class="feed-window" id="feed-window">
+            {% for post in posts %}
+                <div class="img-text-message" id="post-{{ post.id }}">
+
+
+                    <div class="message-text-container">
+                        <form method="POST">
+                            <button type="submit" name="action" value="post.id = {{ post.id }}" class="Username-message">
+                                <img src="{{ users[loop.index0].profilePicture }}" alt="" class="profile-picture-message">
+                                @{{ users[loop.index0].username }}
+                            </button>
+                        </form>
+                        <p>{{ post.created_at.strftime('%d.%m.%Y') }}</p>
+                        </div>
+
+                    <p class="Content-message">
+                        {{ post.content }}
+                    </p>
+
+                        <div class="like-button-container">
+                            <!-- ✅ Klasse ist jetzt "like-btn", data-post-id ist gesetzt -->
+                            <button class="like-btn" data-post-id="{{ post.id }}">🤍</button>
+                            <span id="like-count-{{ post.id }}">{{ post.likers | length }}</span>
+                        </div>
+
+                        <div class="comment-button-container">
+                            <!-- ✅ Klasse ist jetzt "like-btn", data-post-id ist gesetzt -->
+                            <button class="comments-btn" data-post-id="{{ post.id }}">💬</button>
+                            <span id="like-count-{{ post.id }}">1</span>
+                        </div>
+
+                        <div class="share-button-container">
+                            <!-- ✅ Klasse ist jetzt "like-btn", data-post-id ist gesetzt -->
+                            <button class="like-btn" data-post-id="{{ post.id }}">🚀</button>
+                            <span id="like-count-{{ post.id }}">1</span>
+                        </div>
+            </div>
+        {% endfor %}
+    </div>
+        
+        <section class="comment-section" id="comment-section">
+        <h3>Kommentare</h3>
+
+        <input type="text" placeholder="Schreibe einen Kommentar" id="write_comment">
+        <button id="send_comment">Senden</button>
+        </section>
+    </div>
+
+        <div class="selection-bar">
+            <form action="" method="POST" class="selection-form">
+                <button class="search-user-button" id="search-user" type="button">🔎</button>
+                
+                <button class="new-post-button" name="action" value="new_post" type="submit">+</button>
+
+                <button class="profilePicture-small-feed" name="action" value="open_settings" type="submit">
+                    <img src="{{ session_user.profilePicture }}" alt="" class="profilePicture-small-feed">
+                </button>
+            </form>
+        </div>
+        <form action="" method="POST" class="search-user-form">
+            <input name="search-input" type="text" class="search-user-input" placeholder="Benutzername suchen">
+            <button type="submit" name="action" value="search_user" class="search">Suchen</button>
+        </form> 
+
+    <!-- ✅ Schritt 1: Username als JS-Variable definieren, BEVOR main.js lädt -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+        const currentUsername = "{{ session_user.username }}";
+    </script>
+    <script src="{{ url_for('static', filename='/main.js') }}"></script>
+</body>
+</html>

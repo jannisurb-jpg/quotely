@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ username }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <p><strong>Settings</strong></p>
+            <div class="sidebar-button-container">
+                        <!-- ✅ Klasse ist jetzt "like-btn", data-post-id ist gesetzt -->
+                        <a class="sidebar-btn" href="#account">Account</a>
+                    </div>
+            <div class="sidebar-button-container">
+                        <!-- ✅ Klasse ist jetzt "like-btn", data-post-id ist gesetzt -->
+                        <a class="sidebar-btn" href="#design">Design</a>
+                    </div>
+            <div class="sidebar-button-container">
+                        <!-- ✅ Klasse ist jetzt "like-btn", data-post-id ist gesetzt -->
+                        <a class="sidebar-btn" href="#privacy">Privatsphäre</a>
+                    </div>
+        </div>
+
+        <div class="windows-settings">
+            <div class="settings-window" id="account">
+                <h2>Account</h2>
+                <div class="change-profilepic-window">
+                <form method="POST" enctype="multipart/form-data" class="profilepic-change-window-form">
+                        {{ form.hidden_tag() }}
+                
+                        {% for error in form.photo.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+
+                        <div class="profilepic-change-window">
+                            <!-- Versteckter File-Input -->
+                                {{ form.photo(class="form-control", id="hidden-file-input", style="display:none;") }}
+
+                                <!-- Profilbild öffnet Dateidialog -->
+                                <div class="profilePicture-settings" 
+                                    onclick="document.getElementById('hidden-file-input').click()" 
+                                    style="cursor: pointer;">
+                                    {% if file_url %}
+                                        <img src="{{ file_url }}" alt="Profilbild ändern" class="profilePicture-settings">
+                                    {% else %}
+                                        <img src="{{ profilePicture }}" alt="Profilbild ändern" class="profilePicture-settings">
+                                    {% endif %}
+                                </div>
+
+                                <!-- Sichtbarer Upload-Button -->
+                                <div class="col-auto">
+                                    {{ form.submit(class="profilepic-buttons") }}
+                                    <form class="input-group-dashboard" action="" method="POST">
+                                        <button type="submit" name="action" value="delete_profilepic" class="profilepic-buttons">Löschen</button>
+                                    </form>
+                                </div>
+                        </div>
+                    </form>
+                <form class="input-group-dashboard" action="" method="POST">
+                    <p>Email-Adresse:</p>
+                    <input type="text" name="change_email" placeholder="{{ session_user.email_address }}" class="inputField">
+                    <button type="submit" name="action" value="change_email" class="submit-change">Bestätigen</button>
+                </form>
+                <form class="input-group-dashboard" action="" method="POST">
+                    <p>Benutzername:</p>
+                    <input type="text" name="change_username" placeholder="{{ session_user.username }}" class="inputField">
+                    <button type="submit" name="action" value="change_username" class="submit-change">Bestätigen</button>
+                </form>
+                <form class="input-group-dashboard" action="" method="POST">
+                    <p>Passwort:</p>
+                    <input type="password" name="change_password" placeholder="Neues Passwort eingeben..." class="inputField">
+                    <button type="submit" name="action" value="change_password" class="submit-change">Bestätigen</button>
+                </form>
+                <form class="input-group-dashboard" action="" method="POST">
+                    <button type="submit" name="action" value="sign-out" class="sign-out">Abmelden</button>
+                </form>
+                </div>
+            </div>
+
+            <div class="settings-window" id="design">
+                <h2>Design</h2>
+            </div>
+
+            <div class="settings-window" id="privacy">
+                <h2>Privatsphäre</h2>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="title"><strong>Dashboard</strong></div>
+    <div class="dashboard-window">
+        <p>Hallo {{ username }}!</p>
+        <p>Du hast dein Konto am {{ created_at.strftime("%d.%m.%Y") }} erstellt!</p>
+
+        <form class="input-group-dashboard" action="" method="POST">
+            <input type="text" name="change_password" placeholder="Neues Passwort eingeben..." class="inputField">
+            <button type="submit" name="action" value="change_password" class="submit">Bestätigen</button>
+        </form>
+        <form class="input-group-dashboard" action="" method="POST">
+            <button type="submit" name="action" value="change_profilePic" class="submit">Profilbild ändern</button>
+        </form>
+    </div>
+
+    {% if form %}
+    <div class="profilePic-change-window {{ changeProfilePic }}">
+        <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+        
+                {% for error in form.photo.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+
+                <div class="roww justify-content-center">
+                    <div class="col-auto">
+                        {{ form.photo(class="form-control") }}
+                    </div>
+                    <div class="col-auto">
+                        {{ form.submit(class="btn btn-success") }}
+                    </div>
+                </div>
+            </form>
+
+            {% if file_url %}
+            <div class="mt-5">
+                <img src="{{ file_url }}" alt="">
+            </div>
+            {% endif %}
+    </div>
+    {% endif %}
+
+    {% if username == "admin" %}
+    <div class="dashboard-window">
+            <form class="admin-view" action="" method="POST">
+            <p>Admin Bereich</p>
+            <table class="admin-table">
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Löschen?</th>
+                </tr>
+
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email_address }}</td>
+                    <td>{{ user.username }}</td>
+                    <td><button type="submit" class="submit" name="delete" value="{{ user.id }}">Löschen</button></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
+    {% endif %}
+
+    <!--<section class="account-symbol">
+        <form action="" method="POST">
+            <button class="profilePicture-small" name="action" value="open_settings" type="submit">
+                <img src="{{ profilePicture }}" alt="" class="profilePicture-small">
+            </button>
+        </form>
+    </section>-->
+</body>
+</html>

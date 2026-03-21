@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SignUp</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="title"><strong>Sign Up!</strong></div>
+    <div class="signup-window">
+      <form class="input-group" action="" method="POST">
+        <div class="input-container {{ notAnEmail }}">
+          <input
+            type="text"
+            name="email_address"
+            placeholder="📧 Email-Adresse eingeben..."
+            class="inputField"
+          />
+          <p class="error-message-signup">
+            Das ist keine Email-Adresse oder Email schon vergeben
+          </p>
+        </div>
+        <div class="input-container {{ notAnUsername }}">
+          <input
+            type="text"
+            name="username"
+            placeholder="👤 Nutzernamen eingeben..."
+            class="inputField"
+          />
+          <p class="error-message-signup">
+            Dieser Benutzername ist schon vergeben
+          </p>
+        </div>
+        <div class="input-container {{ notAPassword }}">
+          <input
+            type="password"
+            name="password"
+            placeholder="🔐 Passwort eingeben..."
+            class="inputField"
+          />
+          <p class="error-message-signup">Das Passwort ist zu kurz</p>
+        </div>
+        <button type="submit" class="submit">Signup</button>
+      </form>
+
+      <form class="login-instead" action="" method="POST">
+        <button
+          type="submit"
+          name="GoToLogin"
+          value="clicked"
+          class="changeToOtherMode"
+        >
+          Stattdessen einloggen
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

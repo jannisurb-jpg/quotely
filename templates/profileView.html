@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotely</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="head_line_profile_view">
+        <img src="{{ user.profilePicture }}" alt="" class="profilePicture-big">
+        <h1 class="title profileview"><strong>@{{ username }}</strong></h1>
+
+        {% if session_user == user %}
+        <form action="" method="POST" class="settings-button-container">
+            <button class="settings-button" name="action" value="open_settings_real" type="submit">
+                <strong>⚙</strong>
+            </button>
+        </form>
+        {% endif %}
+    </div>
+
+    <div class="profile_stats">
+        <p id="follower-count-{{ user.id }}">Follower: {{ user.follower | length }}</p>
+        <p>Posts: {{ totalPosts }}</p>
+        <p>Likes: {{ totalLikes }}</p>
+
+        {% if session_user != user %}
+        {% if session_user not in user.follower %}
+        <div class="follow-button-container unfollowed">
+            <!-- ✅ Klasse ist jetzt "like-btn", data-post-id ist gesetzt -->
+            <button class="follow-btn unfollowed" data-post-id="{{ user.id }}">Folgen</button>
+            <span id="follower-count-{{ user.id }}"></span>
+        </div>
+        {% else %}
+        <div class="follow-button-container followed">
+            <!-- ✅ Klasse ist jetzt "like-btn", data-post-id ist gesetzt -->
+            <button class="follow-btn followed" data-post-id="{{ user.id }}">Gefolgt</button>
+            <span id="follower-count-{{ user.id }}"></span>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="feed-window">
+        {% for post in user_posts %}
+            <div class="img-text-message" id="post-{{ post.id }}">
+
+
+                <div class="message-text-container">
+                    <form method="POST">
+                        <button type="submit" name="action" value="post.id = {{ post.id }}" class="Username-message">
+                            <img src="{{ user.profilePicture }}" alt="" class="profile-picture-message">
+                            @{{ username }}
+                        </button>
+                    </form>
+                    <p>{{ post.created_at.strftime('%d.%m.%Y') }}</p>
+                    </div>
+
+                <p class="Content-message">
+                    {{ post.content }}
+                </p>
+
+                    <div class="like-button-container">
+                        <!-- ✅ Klasse ist jetzt "like-btn", data-post-id ist gesetzt -->
+                        <button class="like-btn" data-post-id="{{ post.id }}">🤍</button>
+                        <span id="like-count-{{ post.id }}">{{ post.likers | length }}</span>
+                    </div>
+
+                    <div class="comment-button-container">
+                        <!-- ✅ Klasse ist jetzt "like-btn", data-post-id ist gesetzt -->
+                        <button class="like-btn" data-post-id="{{ post.id }}">💬</button>
+                        <span id="like-count-{{ post.id }}">1</span>
+                    </div>
+
+                    <div class="share-button-container">
+                        <!-- ✅ Klasse ist jetzt "like-btn", data-post-id ist gesetzt -->
+                        <button class="like-btn" data-post-id="{{ post.id }}">🚀</button>
+                        <span id="like-count-{{ post.id }}">1</span>
+                    </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+        const username_to_follow = "{{ user.username }}";
+        const currentUsername = "{{ session_user.username }}";
+    </script>
+    <script src="{{ url_for('static', filename='/main.js') }}"></script>
+</body>

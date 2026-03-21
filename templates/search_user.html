@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotely</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+    <div class="search-user-container">
+        <form action="" method="POST" class="search-user-form">
+            <input name="searched-input" type="text" class="searched-user-input" placeholder="Benutzername suchen" value="{{ lastSearch }}">
+            <button type="submit" name="action" value="search_user">Suchen</button>
+        </form> 
+
+        <form method="POST" class="user-search-result" id="user-search-result">
+                {% for user in users %}
+                <div class="user-card">
+                        <button type="submit" name="action" value="user.id = {{ user.id }}" class="Username-message">
+                            <img src="{{ user.profilePicture }}" alt="" class="profile-picture-message">
+                            @{{ user.username }}
+                    </button>
+                </div>
+                {% endfor %}
+        </form>
+    </div>
+
+        <script>
+        const scroller = document.getElementById('user-search-result');
+        if (scroller) {
+            scroller.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                scroller.scrollLeft += e.deltaY;
+            }, { passive: false });
+        }
+    </script>
+</body>

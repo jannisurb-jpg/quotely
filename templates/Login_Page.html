@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="title"><strong>Log in!</strong></div>
+    <div class="signup-window">
+        <form class="input-group" action="" method="POST">
+            <div class="email-wrapper {{ 'tooManyTries' if tooManyTries else '' }}">
+                <div class="error-message">Du hast zu viele Fehlversuche gehabt. <br>
+                                            Versuche es erneut in: {{ blockedTimeLeft }}{{ timeUnit }} </div>
+                <input type="text" name="email_address" value="{{ email }}" placeholder="🪪 Email-Adresse oder Benutzernamen eingeben..." class="inputField">
+            </div>
+            <input type="password" name="password" placeholder="🔐 Passwort eingeben..." class="inputField password">
+            <button type="submit" class="submit">Login</button>
+        </form>
+        <form class="login-instead" action="" method="POST">
+            <button
+          type="submit"
+          name="ResetPasswordNotLoggedIn"
+          value="clicked"
+          class="changeToOtherMode forgot_password">
+          Passwort vergessen
+        </button>
+            <button type="submit" name="GoTosignup" value="clicked" class="changeToOtherMode">Stattdessen registrieren</button>
+        </form>
+    </div>
+</body>
+</html>
